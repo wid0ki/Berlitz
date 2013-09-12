@@ -8,6 +8,7 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QDebug>
+#include <QDate>
 
 namespace Ui {
 class BuyCard;
@@ -20,6 +21,8 @@ class BuyCard : public QDialog
 public:
     explicit BuyCard(QWidget *parent = 0);
     QSqlDatabase sdb;
+    int currentClient;
+    int currentCard;
     ~BuyCard();
     
 private:
@@ -29,6 +32,7 @@ private slots:
     void Buy();
     void GetCards();
     void ChangePrice();
+    void GetClients();
 };
 
 #endif // BUYCARD_H

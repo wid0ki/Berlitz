@@ -25,6 +25,9 @@ public:
     
 private:
     Ui::ViewBlock *ui;
+
+private slots:
+    void Connection();
 };
 
 #endif // VIEWBLOCK_H

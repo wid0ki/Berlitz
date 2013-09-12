@@ -94,6 +94,24 @@
       <string>Добавить клиента</string>
      </property>
     </widget>
+    <widget class="QCommandLinkButton" name="buyCardBut">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>360</y>
+       <width>199</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Купить карту</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -110,7 +128,6 @@
      <string>Программа</string>
     </property>
     <addaction name="settings"/>
-    <addaction name="action_4"/>
     <addaction name="separator"/>
     <addaction name="exit"/>
    </widget>

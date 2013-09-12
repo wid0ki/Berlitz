@@ -3,6 +3,7 @@
 #include "client.h"
 #include <QDebug>
 #include <QDate>
+#include <QMessageBox>
 
 Contract::Contract(QWidget *parent) :
     QDialog(parent),
@@ -30,6 +31,9 @@ void Contract::SetStyle(QString buttonStyle, QString lineStyle) {
 }
 
 void Contract::AddContract() {
+    QString currentCard = "none";
+    int lastid = -1;
+    int contractid = 0;
     QSqlQuery * query = new QSqlQuery(sdb);
     if (!sdb.open()) {
         qDebug()<<"Something wrong with db openning!";
@@ -43,34 +47,49 @@ void Contract::AddContract() {
         query->exec();
         query->next();
         currentClient = query->record().value("id").toInt();
+        query->prepare("SELECT id, type FROM card WHERE id_client=:id_client ORDER BY id DESC;");
+        query->bindValue(":id_client",currentClient);
+        query->exec();
+        if (query->first()) {
+            lastid = query->record().value("id").toInt();
+            currentCard = query->record().value("type").toString();
+            qDebug()<<lastid<<" "<<currentCard;
+        }
         query->prepare("INSERT INTO contract (id_client, sum) VALUES (:id_client,:sum);");
         query->bindValue(":id_client",currentClient);
         query->bindValue(":sum",ui->price->text().toInt());
+        query->exec();
+
+        query->prepare("SELECT id FROM contract WHERE id_client=:id_client ORDER BY id DESC;");
+        query->bindValue(":id_client",currentClient);
+        query->exec();
+        if (query->first())
+            contractid = query->record().value("id").toInt();
+
+        query->prepare("INSERT INTO operation (id_client, id_contract, id_card, date, sum) VALUES (:id_client, :id_contract, :id_card, :date, :sum);");
+        query->bindValue(":id_client", currentClient);
+        query->bindValue(":id_contract", contractid);
+        query->bindValue(":id_card", lastid);
+        query->bindValue(":sum", ui->price->text().toInt());
+        query->bindValue(":date", QDate::currentDate().toString("dd.MM.yyyy"));
         if (query->exec())
             this->close();
         else {
             ui->price->clear();
         }
     }
+
     if (!query->execBatch())
         qDebug() << query->lastError();
-
-    QString currentCard = "none";
-    int lastid = -1;
-    query->prepare("SELECT id, type FROM card WHERE id_client=:id_client ORDER BY id DESC;");
-    query->bindValue(":id_client",currentClient);
-    query->exec();
-    if (query->first()) {
-        lastid = query->record().value("id").toInt();
-        currentCard = query->record().value("type").toString();
-        qDebug()<<lastid<<" "<<currentCard;
-    }
 
     if ((SumPrices() >= 25000 || ContractNumber() >= 2) && currentCard == "none") {
         query->prepare("INSERT INTO card(type, date_begin, id_client) VALUES ('Berlitz Respect',:date,:id_client);");
         query->bindValue(":id_client",currentClient);
         query->bindValue(":date",QDate::currentDate().toString("dd.MM.yyyy"));
         query->exec();
+        QMessageBox msgBox;
+        msgBox.setText("Клиент "+ui->clientBox->currentText()+" получает карту Berlitz Respect.");
+        msgBox.exec();
     }
     if (SumPrices() >= 50000 && (currentCard == "Berlitz Respect" || currentCard == "none")) {
         query->prepare("UPDATE card SET date_end=:date_end WHERE id=:id;");
@@ -82,6 +101,9 @@ void Contract::AddContract() {
         query->bindValue(":date",QDate::currentDate().toString("dd.MM.yyyy"));
         query->bindValue(":id_parent",lastid);
         query->exec();
+        QMessageBox msgBox;
+        msgBox.setText("Клиент "+ui->clientBox->currentText()+" получает карту Berlitz Honour.");
+        msgBox.exec();
     }
     if ((ui->price->text().toInt() >= 100000 || SumPrices() >= 100000) && (currentCard == "Berlitz Honour" || currentCard == "none" || currentCard == "Berlitz Respect")) {
         query->prepare("UPDATE card SET date_end=:date_end WHERE id=:id;");
@@ -93,6 +115,9 @@ void Contract::AddContract() {
         query->bindValue(":date",QDate::currentDate().toString("dd.MM.yyyy"));
         query->bindValue(":id_parent",lastid);
         query->exec();
+        QMessageBox msgBox;
+        msgBox.setText("Клиент "+ui->clientBox->currentText()+" получает карту Berlitz Silver Member.");
+        msgBox.exec();
     }
     if ((ui->price->text().toInt() >= 200000 || SumPrices() >= 200000) && (currentCard == "Berlitz Silver Member" || currentCard == "Berlitz Honour" || currentCard == "none" || currentCard == "Berlitz Respect")) {
         query->prepare("UPDATE card SET date_end=:date_end FROM card WHERE id=:id;");
@@ -104,6 +129,9 @@ void Contract::AddContract() {
         query->bindValue(":date",QDate::currentDate());
         query->bindValue(":id_parent",lastid);
         query->exec();
+        QMessageBox msgBox;
+        msgBox.setText("Клиент "+ui->clientBox->currentText()+" получает карту Berlitz Gold Member.");
+        msgBox.exec();
     }
 }
 
@@ -129,13 +157,14 @@ int Contract::SumPrices() {
         qDebug()<<"Something wrong with db openning!";
     }
     else {
-        query->prepare("SELECT sum FROM contract WHERE id_client=:id_client;");
+        query->prepare("SELECT sum::numeric FROM contract WHERE id_client=:id_client;");
         query->bindValue(":id_client", currentClient);
         query->exec();
         while (query->next()) {
             sum += query->record().value("sum").toInt();
         }
     }
+    qDebug()<<"Sum: "<<sum<<"Current client: "<<currentClient;
     return sum;
 }
 

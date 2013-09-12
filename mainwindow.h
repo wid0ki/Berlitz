@@ -30,7 +30,7 @@ private:
     QSqlDatabase sdb;
 
 private slots:
-    void BuyCard();
+    void BuyCardClient();
     void ShowCards();
     void ShowClients();
     void ShowContracts();

@@ -3,6 +3,7 @@
 #include "client.h"
 #include "contract.h"
 #include "settings.h"
+#include "buycard.h"
 #include "viewblock.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -21,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->exit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->newClient, SIGNAL(triggered()),this, SLOT(ShowAddClient()));
     connect(ui->newContract, SIGNAL(triggered()), this, SLOT(ShowAddContract()));
-    connect(ui->buyCard, SIGNAL(triggered()), this, SLOT(BuyCard()));
+    connect(ui->buyCard, SIGNAL(triggered()), this, SLOT(BuyCardClient()));
     connect(ui->showCards, SIGNAL(triggered()), this, SLOT(ShowCards()));
     connect(ui->showClients, SIGNAL(triggered()), this, SLOT(ShowClients()));
     connect(ui->showPays, SIGNAL(triggered()), this, SLOT(ShowPays()));
@@ -104,10 +105,13 @@ void MainWindow::BerlitzTabMake() {
     ui->historyNumber->setText("Уровень (по порядку)");
     connect(ui->addClient, SIGNAL (clicked()), this, SLOT(ShowAddClient()));
     connect(ui->addContract, SIGNAL (clicked()), this, SLOT(ShowAddContract()));
+    connect(ui->buyCardBut, SIGNAL(clicked()), this, SLOT(BuyCardClient()));
 }
 
-void MainWindow::BuyCard() {
-
+void MainWindow::BuyCardClient() {
+    BuyCard *form = new BuyCard;
+    form->sdb = sdb;
+    form->show();
 }
 
 void MainWindow::ShowViewBlock(int number) {
