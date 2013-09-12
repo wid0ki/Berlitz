@@ -16,17 +16,23 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     client.cpp \
     contract.cpp \
-    buycard.cpp
+    buycard.cpp \
+    settings.cpp \
+    viewblock.cpp
 
 HEADERS  += mainwindow.h \
     client.h \
     contract.h \
-    buycard.h
+    buycard.h \
+    settings.h \
+    viewblock.h
 
 FORMS    += mainwindow.ui \
     client.ui \
     contract.ui \
-    buycard.ui
+    buycard.ui \
+    settings.ui \
+    viewblock.ui
 
 OTHER_FILES += \
     bd.sql

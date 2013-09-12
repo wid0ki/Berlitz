@@ -7,7 +7,6 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
-#include <QDialog>
 #include "buycard.h"
 
 namespace Ui {

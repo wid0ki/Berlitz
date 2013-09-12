@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>293</width>
-    <height>188</height>
+    <height>256</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>140</y>
+     <y>210</y>
      <width>114</width>
      <height>32</height>
     </rect>
@@ -30,7 +30,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>60</y>
+     <y>100</y>
      <width>251</width>
      <height>31</height>
     </rect>
@@ -42,14 +42,14 @@
     <enum>Qt::NoContextMenu</enum>
    </property>
    <property name="placeholderText">
-    <string>Имя</string>
+    <string>Иван</string>
    </property>
   </widget>
   <widget class="QPushButton" name="cancel">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>140</y>
+     <y>210</y>
      <width>114</width>
      <height>32</height>
     </rect>
@@ -62,26 +62,65 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>20</y>
+     <y>40</y>
      <width>251</width>
      <height>31</height>
     </rect>
    </property>
    <property name="placeholderText">
-    <string>Фамилия</string>
+    <string>Иванов</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="middlename">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>100</y>
+     <y>160</y>
      <width>251</width>
      <height>31</height>
     </rect>
    </property>
    <property name="placeholderText">
-    <string>Отчество</string>
+    <string>Иванович</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>62</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Фамилия:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>62</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Имя:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>140</y>
+     <width>62</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Отчество:</string>
    </property>
   </widget>
  </widget>

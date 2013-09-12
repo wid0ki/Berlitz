@@ -7,6 +7,9 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
+#include <QDebug>
+#include <QFile>
+#include <QTextStream>
 
 namespace Ui {
 class MainWindow;
@@ -25,14 +28,21 @@ private:
     QString buttonStyle;
     QString lineStyle;
     QSqlDatabase sdb;
-    void HideAll();
 
 private slots:
+    void BuyCard();
+    void ShowCards();
+    void ShowClients();
+    void ShowContracts();
+    void ShowPays();
+    void ShowViewBlock(int);
     void ShowAddClient();
     void ShowAddContract();
     void BerlitzTabMake();
-//    void SettingsTabMake();
     void GetSettings();
+    void OpenSettings();
+    bool ConnectToDB(QStringList);
+    void ChangeSettings(QStringList);
 };
 
 #endif // MAINWINDOW_H
