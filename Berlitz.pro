@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Berlitz
 TEMPLATE = app
-
+CONFIG += static
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -18,24 +18,28 @@ SOURCES += main.cpp\
     contract.cpp \
     buycard.cpp \
     settings.cpp \
-    viewblock.cpp
+    viewblock.cpp \
+    port.cpp
 
 HEADERS  += mainwindow.h \
     client.h \
     contract.h \
     buycard.h \
     settings.h \
-    viewblock.h
+    viewblock.h \
+    port.h
 
 FORMS    += mainwindow.ui \
     client.ui \
     contract.ui \
     buycard.ui \
     settings.ui \
-    viewblock.ui
+    viewblock.ui \
+    port.ui
 
 OTHER_FILES += \
-    bd.sql
+    bd.sql \
+    mssql_bd.sql
 
 RESOURCES += \
     res.qrc

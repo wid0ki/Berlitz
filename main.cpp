@@ -1,11 +1,21 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QtSql>
+#include <QSettings>
+
+//TODO: не обновляются настройки, не обновляются клиенты
 
 int main(int argc, char *argv[])
 {
+
+    QStringList paths = QCoreApplication::libraryPaths();
+    paths.append(".");
+    paths.append("imageformats");
+    paths.append("platforms");
+    paths.append("sqldrivers");
+    QCoreApplication::setLibraryPaths(paths);
+
     QApplication a(argc, argv);
-    QSettings settings;
     MainWindow w;
     w.show();
     

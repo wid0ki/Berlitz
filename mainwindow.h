@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <QMultiHash>
 
 namespace Ui {
 class MainWindow;
@@ -28,6 +29,7 @@ private:
     QString buttonStyle;
     QString lineStyle;
     QSqlDatabase sdb;
+    QMultiHash<QString, QString> dbs;
 
 private slots:
     void BuyCardClient();
@@ -41,8 +43,8 @@ private slots:
     void BerlitzTabMake();
     void GetSettings();
     void OpenSettings();
-    bool ConnectToDB(QStringList);
-    void ChangeSettings(QStringList);
+    void Export();
+    void Import();
 };
 
 #endif // MAINWINDOW_H

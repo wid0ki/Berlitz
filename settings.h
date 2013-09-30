@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include <QDialog>
+#include <QSettings>
 
 namespace Ui {
 class Settings;
@@ -14,9 +15,6 @@ class Settings : public QDialog
 public:
     explicit Settings(QWidget *parent = 0);
     ~Settings();
-
-signals:
-    void NewSettings(QStringList);
 
 private slots:
     void WriteSettings();

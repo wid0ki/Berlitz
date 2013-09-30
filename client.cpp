@@ -41,6 +41,7 @@ void Client::AddClient() {
     }
     if (!query->execBatch())
         qDebug() << query->lastError();
+    this->deleteLater();
 }
 
 Client::~Client()

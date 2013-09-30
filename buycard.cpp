@@ -121,6 +121,7 @@ void BuyCard::Buy() {
     }
     if (!query->execBatch())
         qDebug() << query->lastError();
+    this->deleteLater();
 }
 
 BuyCard::~BuyCard()

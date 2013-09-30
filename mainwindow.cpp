@@ -4,20 +4,26 @@
 #include "contract.h"
 #include "settings.h"
 #include "buycard.h"
+#include "port.h"
 #include "viewblock.h"
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    dbs.insert("PostgreSQL","QPSQL");
+    dbs.insert("MSSQL","QODBC");
+    dbs.insert("MySQL","QMYSQL");
     buttonStyle = "";
     lineStyle = QString (
                 "QLineEdit {"
                             "border-radius: 5px;"
                             "border: solid;"
                             "}");
+    QSettings *settings = new QSettings("settings.conf",QSettings::NativeFormat);
+    qDebug()<<settings->value("database").toString();
     connect(ui->settings, SIGNAL(triggered()), this, SLOT(OpenSettings()));
     connect(ui->exit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->newClient, SIGNAL(triggered()),this, SLOT(ShowAddClient()));
@@ -27,60 +33,33 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->showClients, SIGNAL(triggered()), this, SLOT(ShowClients()));
     connect(ui->showPays, SIGNAL(triggered()), this, SLOT(ShowPays()));
     connect(ui->showContract, SIGNAL(triggered()), this, SLOT(ShowContracts()));
+    connect(ui->exportData, SIGNAL(triggered()), this, SLOT(Export()));
+    connect(ui->importData, SIGNAL(triggered()), this, SLOT(Import()));
     BerlitzTabMake();
+}
+
+void MainWindow::Export() {
+    Port *form = new Port;
+    form->sdb = sdb;
+    form->show();
+}
+
+void MainWindow::Import() {
+
 }
 
 void MainWindow::OpenSettings() {
-    Settings *form = new Settings;
+    Settings * form = new Settings();
     form->show();
-    connect(form, SIGNAL(NewSettings(QStringList)), this, SLOT(ChangeSettings(QStringList)));
 }
 
 void MainWindow::GetSettings() {
-    QFile file("settings");
-    if (file.exists())
-    {
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-            return;
-        QTextStream in(&file);
-        QStringList settings = in.readLine().split(" ");
-        file.close();
-        if (!ConnectToDB(settings))
-            BerlitzTabMake();
-    }
-    else
-        OpenSettings();
-}
-
-bool MainWindow::ConnectToDB(QStringList settings) {
-    if (settings.at(0) == "PostgreSQL")
-        sdb = QSqlDatabase::addDatabase("QPSQL");
-        else
-        if (settings.at(0) == "MSSQL")
-            sdb = QSqlDatabase::addDatabase("QODBC");
-        else
-            sdb = QSqlDatabase::addDatabase("QMYSQL");
-    sdb.setDatabaseName(settings.at(2));
-    sdb.setUserName(settings.at(3));
-    sdb.setHostName(settings.at(1));
-    sdb.setPassword(settings.at(4));
-    return sdb.open();
-}
-
-void MainWindow::ChangeSettings(QStringList settings) {
-    ConnectToDB(settings);
-    QFile file("settings");
-    QTextStream out(&file);
-    out.setCodec("UTF-8");;
-
-    if (!file.open(QIODevice::WriteOnly))
-        qDebug()<<"Error with reading settings file";
-
-    for (int i=0; i<settings.length(); i++)
-        out << settings.at(i) << " ";
-    file.close();
-    GetSettings();
-    BerlitzTabMake();
+    QSettings *settings = new QSettings("settings.conf",QSettings::NativeFormat);
+    sdb = QSqlDatabase::addDatabase(dbs.value(settings->value("database").toString()));
+    sdb.setDatabaseName(settings->value("dbname").toString());
+    sdb.setUserName(settings->value("username").toString());
+    sdb.setHostName(settings->value("hostname").toString());
+    sdb.setPassword(settings->value("password").toString());
 }
 
 void MainWindow::BerlitzTabMake() {
