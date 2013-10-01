@@ -60,6 +60,7 @@ void MainWindow::GetSettings() {
     sdb.setUserName(settings->value("username").toString());
     sdb.setHostName(settings->value("hostname").toString());
     sdb.setPassword(settings->value("password").toString());
+    sdb.setPort(settings->value("port").toInt());
 }
 
 void MainWindow::BerlitzTabMake() {

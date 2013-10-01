@@ -13,6 +13,7 @@ Settings::Settings(QWidget *parent) :
     ui->dbName->setText(settings->value("dbname").toString());
     ui->userName->setText(settings->value("username").toString());
     ui->passName->setText(settings->value("password").toString());
+    ui->port->setText(settings->value("port").toString());
     connect(ui->cancel, SIGNAL(clicked()), this, SLOT(close()));
     connect(ui->save, SIGNAL(clicked()), this, SLOT(WriteSettings()));
 }
@@ -24,6 +25,7 @@ void Settings::WriteSettings() {
     settings->setValue("dbname","postgres");
     settings->setValue("username","postgres");
     settings->setValue("password","12345");
+    settings->setValue("port","5432");
     settings->sync();
     deleteLater();
 }
