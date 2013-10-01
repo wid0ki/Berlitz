@@ -20,13 +20,14 @@ Settings::Settings(QWidget *parent) :
 
 void Settings::WriteSettings() {
     QSettings *settings = new QSettings("settings.conf",QSettings::NativeFormat);
-    settings->setValue("hostname", "localhost");
-    settings->setValue("database", "PostgreSQL");
-    settings->setValue("dbname","postgres");
-    settings->setValue("username","postgres");
-    settings->setValue("password","12345");
-    settings->setValue("port","5432");
+    settings->setValue("hostname", ui->hostName->text());
+    settings->setValue("database", ui->comboBox->currentText());
+    settings->setValue("dbname", ui->dbName->text());
+    settings->setValue("username", ui->userName->text());
+    settings->setValue("password", ui->passName->text());
+    settings->setValue("port", ui->port->text());
     settings->sync();
+    emit NewSettings();
     deleteLater();
 }
 

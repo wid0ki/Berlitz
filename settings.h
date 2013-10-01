@@ -21,6 +21,9 @@ private slots:
     
 private:
     Ui::Settings *ui;
+
+signals:
+    void NewSettings();
 };
 
 #endif // SETTINGS_H

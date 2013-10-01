@@ -51,6 +51,7 @@ void MainWindow::Import() {
 void MainWindow::OpenSettings() {
     Settings * form = new Settings();
     form->show();
+    connect(form, SIGNAL(NewSettings()), this, SLOT(BerlitzTabMake()));
 }
 
 void MainWindow::GetSettings() {
