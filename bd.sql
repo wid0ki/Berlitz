@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS client;
 DROP TABLE IF EXISTS card;
 DROP TABLE IF EXISTS contract;
 DROP TABLE IF EXISTS operation;
+DROP VIEW IF EXISTS info;
 
 CREATE TYPE TYPE_CARDS AS ENUM ('Berlitz Respect', 'Berlitz Honour', 'Berlitz Silver Member', 'Berlitz Gold Member');
 
@@ -29,17 +30,10 @@ CREATE TABLE card (
 CREATE TABLE contract (
     id SERIAL NOT NULL,
     id_client SERIAL,
-    sum MONEY
+    sum MONEY,
+    date_operation DATE
 ) WITH (
     oids=false
 );
 
-CREATE TABLE operation (
-    id_client SERIAL,
-    id_contract SERIAL,
-    id_card SERIAL,
-    date DATE NOT NULL,
-    sum MONEY
-) WITH (
-oids=false
-);
+CREATE VIEW info AS SELECT client.id, surname, name, middlename, sum, type FROM client RIGHT OUTER JOIN contract ON contract.id_client=client.id RIGHT OUTER JOIN card ON card.id_client=client.id;

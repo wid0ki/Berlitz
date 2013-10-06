@@ -20,7 +20,6 @@ class Client : public QDialog
 public:
     explicit Client(QWidget *parent = 0);
     QSqlDatabase sdb;
-    void SetStyle(QString, QString);
     ~Client();
     
 private:
@@ -28,6 +27,9 @@ private:
 
 private slots:
     void AddClient();
+
+signals:
+    void NewClient();
 };
 
 #endif // CLIENT_H

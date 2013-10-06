@@ -20,16 +20,6 @@ Contract::Contract(QWidget *parent) :
     connect(ui->clientBox, SIGNAL(currentTextChanged(QString)), this, SLOT(ClientCard()));
 }
 
-void Contract::SetStyle(QString buttonStyle, QString lineStyle) {
-    this->lineStyle = lineStyle;
-    this->buttonStyle = buttonStyle;
-    ui->buyCard->setStyleSheet(buttonStyle);
-    ui->cancel->setStyleSheet(buttonStyle);
-    ui->save->setStyleSheet(buttonStyle);
-    ui->newClient->setStyleSheet(buttonStyle);
-    ui->price->setStyleSheet(lineStyle);
-}
-
 void Contract::AddContract() {
     QString currentCard = "none";
     int lastid = -1;
@@ -55,25 +45,19 @@ void Contract::AddContract() {
             currentCard = query->record().value("type").toString();
             qDebug()<<lastid<<" "<<currentCard;
         }
-        query->prepare("INSERT INTO contract (id_client, sum) VALUES (:id_client,:sum);");
+        query->prepare("INSERT INTO contract (id_client, sum, date_operation) VALUES (:id_client,:sum, :date_operation);");
         query->bindValue(":id_client",currentClient);
         query->bindValue(":sum",ui->price->text().toInt());
+        query->bindValue(":date_operation",QDate::currentDate().toString("dd.MM.yyyy"));
         query->exec();
 
         query->prepare("SELECT id FROM contract WHERE id_client=:id_client ORDER BY id DESC;");
         query->bindValue(":id_client",currentClient);
         query->exec();
-        if (query->first())
+        if (query->first()) {
             contractid = query->record().value("id").toInt();
-
-        query->prepare("INSERT INTO operation (id_client, id_contract, id_card, date, sum) VALUES (:id_client, :id_contract, :id_card, :date, :sum);");
-        query->bindValue(":id_client", currentClient);
-        query->bindValue(":id_contract", contractid);
-        query->bindValue(":id_card", lastid);
-        query->bindValue(":sum", ui->price->text().toInt());
-        query->bindValue(":date", QDate::currentDate().toString("dd.MM.yyyy"));
-        if (query->exec())
             this->close();
+        }
         else {
             ui->price->clear();
         }
@@ -176,10 +160,9 @@ void Contract::ClientBuyCard() {
 
 void Contract::AddClient() {
     Client *form = new Client;
-    form->SetStyle(buttonStyle, lineStyle);
     form->sdb = sdb;
     form->show();
-
+    connect(form, SIGNAL(NewClient()), this, SIGNAL(NewClient()));
     LoadClients();
 }
 
@@ -204,6 +187,7 @@ void Contract::LoadClients() {
 }
 
 void Contract::ClientCard() {
+    qDebug()<<"Get info about cards";
     QSqlQuery * query = new QSqlQuery(sdb);
     if (!sdb.open()) {
         qDebug()<<"Something wrong with db openning!";

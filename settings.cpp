@@ -12,6 +12,7 @@ Settings::Settings(QWidget *parent) :
     ui->hostName->setText(settings->value("hostname").toString());
     ui->dbName->setText(settings->value("dbname").toString());
     ui->userName->setText(settings->value("username").toString());
+    ui->passName->setEchoMode(QLineEdit::Password);
     ui->passName->setText(settings->value("password").toString());
     ui->port->setText(settings->value("port").toString());
     connect(ui->cancel, SIGNAL(clicked()), this, SLOT(close()));

@@ -33,6 +33,9 @@ private slots:
     void GetCards();
     void ChangePrice();
     void GetClients();
+
+signals:
+    void ClientBuyCard();
 };
 
 #endif // BUYCARD_H

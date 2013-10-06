@@ -12,14 +12,6 @@ Client::Client(QWidget *parent) :
     connect(ui->save, SIGNAL(clicked()), this, SLOT(AddClient()));
 }
 
-void Client::SetStyle(QString buttonStyle, QString lineStyle) {
-    ui->cancel->setStyleSheet(buttonStyle);
-    ui->save->setStyleSheet(buttonStyle);
-    ui->middlename->setStyleSheet(lineStyle);
-    ui->name->setStyleSheet(lineStyle);
-    ui->surname->setStyleSheet(lineStyle);
-}
-
 void Client::AddClient() {
     this->setWindowFlags(Qt::WindowStaysOnTopHint);
     QSqlQuery * query = new QSqlQuery(sdb);
@@ -46,5 +38,6 @@ void Client::AddClient() {
 
 Client::~Client()
 {
+    emit NewClient();
     delete ui;
 }

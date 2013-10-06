@@ -12,30 +12,31 @@ TARGET = Berlitz
 TEMPLATE = app
 CONFIG += static
 
+#LIBS += libpqdll.lib qsqlodbc.dll
+QTPLUGIN += qsqlodbc
+LIBS += -lpq
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     client.cpp \
     contract.cpp \
     buycard.cpp \
     settings.cpp \
-    viewblock.cpp \
-    port.cpp
+    viewblock.cpp
 
 HEADERS  += mainwindow.h \
     client.h \
     contract.h \
     buycard.h \
     settings.h \
-    viewblock.h \
-    port.h
+    viewblock.h
 
 FORMS    += mainwindow.ui \
     client.ui \
     contract.ui \
     buycard.ui \
     settings.ui \
-    viewblock.ui \
-    port.ui
+    viewblock.ui
 
 OTHER_FILES += \
     bd.sql \

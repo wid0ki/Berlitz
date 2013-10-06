@@ -41,15 +41,5 @@ CREATE TABLE client \
     id_client integer,\
     sum money\
 )\
-\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
-\cf0 CREATE TABLE operation \
-(\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
-\cf0     id_client integer,\
-    id_contract integer,\
-    id_card integer,\
-    date datetime,\
-    sum money\
-)\
 }
+CREATE VIEW sum_contract AS SELECT SUM(sum) FROM contract, client GROUP BY contract.id_client;

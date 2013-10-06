@@ -76,6 +76,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <property name="placeholderText">
     <string>сумма контракта</string>
    </property>

@@ -32,19 +32,20 @@ private:
     QMultiHash<QString, QString> dbs;
 
 private slots:
+    void UpdateClientsNumber();
     void BuyCardClient();
     void ShowCards();
     void ShowClients();
     void ShowContracts();
-    void ShowPays();
     void ShowViewBlock(int);
     void ShowAddClient();
     void ShowAddContract();
     void BerlitzTabMake();
     void GetSettings();
     void OpenSettings();
-    void Export();
-    void Import();
+
+signals:
+    void UpdateCardInfo();
 };
 
 #endif // MAINWINDOW_H

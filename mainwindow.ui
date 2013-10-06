@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Berlitz</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/icons/logo.png</normaloff>:/icons/logo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QFrame" name="berlitzTab">
     <property name="geometry">
@@ -145,10 +149,7 @@
     </property>
     <addaction name="showCards"/>
     <addaction name="showClients"/>
-    <addaction name="showPays"/>
     <addaction name="showContract"/>
-    <addaction name="importData"/>
-    <addaction name="exportData"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -210,18 +211,10 @@
     <string>Выйти</string>
    </property>
   </action>
-  <action name="importData">
-   <property name="text">
-    <string>Ипорт</string>
-   </property>
-  </action>
-  <action name="exportData">
-   <property name="text">
-    <string>Экспорт</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

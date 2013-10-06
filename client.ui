@@ -38,6 +38,9 @@
    <property name="mouseTracking">
     <bool>false</bool>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <property name="contextMenuPolicy">
     <enum>Qt::NoContextMenu</enum>
    </property>
@@ -67,6 +70,12 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <property name="placeholderText">
     <string>Иванов</string>
    </property>
@@ -79,6 +88,9 @@
      <width>251</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
    </property>
    <property name="placeholderText">
     <string>Иванович</string>

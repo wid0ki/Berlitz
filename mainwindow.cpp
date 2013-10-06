@@ -4,9 +4,15 @@
 #include "contract.h"
 #include "settings.h"
 #include "buycard.h"
-#include "port.h"
 #include "viewblock.h"
 #include <QSettings>
+
+/*BUGFIX:
+ * после покупки карты - обновлять сведения о картах на странице заключения контракта
+ * оптимизировать запросы к БД
+ * отображение клиентов
+ * обновление просмотра при добавлении сучности
+ */
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,12 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
     dbs.insert("PostgreSQL","QPSQL");
     dbs.insert("MSSQL","QODBC");
     dbs.insert("MySQL","QMYSQL");
-    buttonStyle = "";
-    lineStyle = QString (
-                "QLineEdit {"
-                            "border-radius: 5px;"
-                            "border: solid;"
-                            "}");
     QSettings *settings = new QSettings("settings.conf",QSettings::NativeFormat);
     qDebug()<<settings->value("database").toString();
     connect(ui->settings, SIGNAL(triggered()), this, SLOT(OpenSettings()));
@@ -31,21 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->buyCard, SIGNAL(triggered()), this, SLOT(BuyCardClient()));
     connect(ui->showCards, SIGNAL(triggered()), this, SLOT(ShowCards()));
     connect(ui->showClients, SIGNAL(triggered()), this, SLOT(ShowClients()));
-    connect(ui->showPays, SIGNAL(triggered()), this, SLOT(ShowPays()));
     connect(ui->showContract, SIGNAL(triggered()), this, SLOT(ShowContracts()));
-    connect(ui->exportData, SIGNAL(triggered()), this, SLOT(Export()));
-    connect(ui->importData, SIGNAL(triggered()), this, SLOT(Import()));
     BerlitzTabMake();
-}
-
-void MainWindow::Export() {
-    Port *form = new Port;
-    form->sdb = sdb;
-    form->show();
-}
-
-void MainWindow::Import() {
-
 }
 
 void MainWindow::OpenSettings() {
@@ -64,11 +51,7 @@ void MainWindow::GetSettings() {
     sdb.setPort(settings->value("port").toInt());
 }
 
-void MainWindow::BerlitzTabMake() {
-    GetSettings();
-    ui->bigNumber->setAlignment(Qt::AlignCenter);
-    ui->historyNumber->setAlignment(Qt::AlignCenter);
-
+void MainWindow::UpdateClientsNumber() {
     QSqlQuery * query = new QSqlQuery(sdb);
     if (!sdb.open()) {
         qDebug()<<"Something wrong with db openning hey!";
@@ -82,7 +65,13 @@ void MainWindow::BerlitzTabMake() {
     }
     if (!query->execBatch())
         qDebug() << query->lastError();
+}
 
+void MainWindow::BerlitzTabMake() {
+    GetSettings();
+    ui->bigNumber->setAlignment(Qt::AlignCenter);
+    ui->historyNumber->setAlignment(Qt::AlignCenter);
+    UpdateClientsNumber();
     ui->historyNumber->setText("Уровень (по порядку)");
     connect(ui->addClient, SIGNAL (clicked()), this, SLOT(ShowAddClient()));
     connect(ui->addContract, SIGNAL (clicked()), this, SLOT(ShowAddContract()));
@@ -93,6 +82,7 @@ void MainWindow::BuyCardClient() {
     BuyCard *form = new BuyCard;
     form->sdb = sdb;
     form->show();
+    connect(form, SIGNAL(ClientBuyCard()), this, SIGNAL(UpdateCardInfo()));
 }
 
 void MainWindow::ShowViewBlock(int number) {
@@ -115,23 +105,20 @@ void MainWindow::ShowContracts() {
     ShowViewBlock(3);
 }
 
-void MainWindow::ShowPays() {
-    ShowViewBlock(4);
-}
-
 void MainWindow::ShowAddClient() {
     Client *form = new Client;
-    form->SetStyle(buttonStyle, lineStyle);
     form->sdb = sdb;
     form->show();
+    connect(form, SIGNAL(NewClient()), this, SLOT(UpdateClientsNumber()));
     connect(form, SIGNAL(destroyed(QObject*)), this, SLOT(BerlitzTabMake()));
 }
 
 void MainWindow::ShowAddContract() {
     Contract *form = new Contract;
-    form->SetStyle(buttonStyle, lineStyle);
     form->sdb = sdb;
     form->show();
+    connect(form, SIGNAL(NewClient()), this, SLOT(UpdateClientsNumber()));
+    connect(this, SIGNAL(UpdateCardInfo()), form, SLOT(ClientCard()));
 }
 
 MainWindow::~MainWindow()

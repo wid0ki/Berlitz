@@ -20,7 +20,6 @@ class Contract : public QDialog
 public:
     explicit Contract(QWidget *parent = 0);
     QSqlDatabase sdb;
-    void SetStyle(QString, QString);
     QString buttonStyle;
     QString lineStyle;
     int currentClient;
@@ -37,6 +36,9 @@ private slots:
     void ClientCard();
     int SumPrices();
     int ContractNumber();
+
+signals:
+    void NewClient();
 };
 
 #endif // CONTRACT_H

@@ -3,7 +3,9 @@
 #include <QtSql>
 #include <QSettings>
 
-//TODO: не обновляются настройки, не обновляются клиенты
+//QT_BEGIN_NAMESPACE
+//Q_IMPORT_PLUGIN(qsqlodbc)
+//QT_END_NAMESPACE
 
 int main(int argc, char *argv[])
 {
@@ -13,9 +15,13 @@ int main(int argc, char *argv[])
     paths.append("imageformats");
     paths.append("platforms");
     paths.append("sqldrivers");
-    QCoreApplication::setLibraryPaths(paths);
+
+    QApplication::setLibraryPaths(paths);
+//    QApplication::addLibraryPath("C:\Qt\5.1.1\Src\qtbase\src\plugins");
 
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon(":/icons/logo.png"));
+
     MainWindow w;
     w.show();
     

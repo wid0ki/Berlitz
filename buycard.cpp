@@ -112,12 +112,7 @@ void BuyCard::Buy() {
         query->bindValue(":id_client", currentClient);
         query->exec();
 
-        query->prepare("INSERT INTO operation (id_client, id_card, date, sum) VALUES (:id_client, :id_card, :date, :sum);");
-        query->bindValue(":date", QDate::currentDate().toString("dd.MM.yyyy"));
-        query->bindValue(":id_client", currentClient);
-        query->bindValue(":id_card", currentCard);
-        query->bindValue(":sum", ui->price->text());
-        query->exec();
+        emit ClientBuyCard();
     }
     if (!query->execBatch())
         qDebug() << query->lastError();
